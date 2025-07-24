@@ -6,13 +6,43 @@ let dialogStep = 0;
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-canvas.width = 1024
-canvas.height = 576
-
-const scaledCanvas = {
+scaledCanvas = {
   width: canvas.width / 4,
   height: canvas.height / 4,
 }
+
+const aspectRatio = 16 / 9;
+function resizeCanvasMaintainingAspect() {
+    
+    let newWidth = window.innerWidth;
+    let newHeight = newWidth / aspectRatio;
+
+    if (newHeight > window.innerHeight) {
+        newHeight = window.innerHeight;
+        newWidth = newHeight * aspectRatio;
+    }
+
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+
+    scaledCanvas.width = newWidth / 4;
+    scaledCanvas.height = newHeight / 4;
+
+    
+}
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerHeight * aspectRatio;
+const camera = {
+    position: {
+        x: 0,
+        y: 0,
+    },
+};
+resizeCanvasMaintainingAspect();
+window.addEventListener('resize', resizeCanvasMaintainingAspect);
+
+
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 const floorCollisions2D = []
@@ -135,13 +165,8 @@ const background = new Sprite({
 })
 
 const backgroundImageHeight = 432
-
-const camera = {
-  position: {
-    x: 0,
-    y: -backgroundImageHeight + scaledCanvas.height,
-  },
-}
+// Обновляем камеру под новые размеры
+    camera.position.y = -backgroundImageHeight + scaledCanvas.height;
 function openDialog(dialogArray) {
     const dialogBox = document.getElementById('dialogBox');
     const dialogText = document.getElementById('dialogText');
@@ -171,10 +196,14 @@ function animate() {
   window.requestAnimationFrame(animate)
   c.fillStyle = 'white'
   c.fillRect(0, 0, canvas.width, canvas.height)
+c.save();
+const scaleX = canvas.width / scaledCanvas.width;
+const scaleY = canvas.height / scaledCanvas.height;
+c.scale(scaleX, scaleY);
+c.translate(camera.position.x, camera.position.y);
 
-  c.save()
-  c.scale(4, 4)
-  c.translate(camera.position.x, camera.position.y)
+
+
   background.update()
   // collisionBlocks.forEach((collisionBlock) => {
   //   collisionBlock.update()
