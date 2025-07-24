@@ -351,16 +351,36 @@ const dialogBox = document.getElementById('dialogBox');
 function advanceDialog() {
     const dialogText = document.getElementById('dialogText');
     const dialogHint = document.getElementById('dialogHint');
+    const fadeOverlay = document.getElementById('fadeOverlay');
+    const canvas = document.querySelector('canvas');
 
     dialogStep++;
     if (dialogStep < activeDialog.length) {
         dialogText.textContent = activeDialog[dialogStep];
     } else {
-        dialogBox.style.display = 'none';
-        dialogHint.style.display = 'none';
-        activeDialog = null;
-
-        // window.location.href = 'https://example.com/nextpage.html';
+        // 1. Сначала скрываем диалог
+        dialogBox.style.opacity = '0';
+        dialogHint.style.opacity = '0';
+        
+        // 2. Затем начинаем затухание игры
+        setTimeout(() => {
+            dialogBox.style.display = 'none';
+            dialogHint.style.display = 'none';
+            
+            // Запускаем анимацию затухания
+            fadeOverlay.style.opacity = '1';
+            fadeOverlay.style.pointerEvents = 'auto';
+            
+            // Можно добавить дополнительные эффекты
+            canvas.style.transition = 'filter 1s ease-in-out';
+            canvas.style.filter = 'blur(5px) grayscale(80%)';
+            
+        }, 300); // Небольшая задержка перед затуханием
+        
+        // 3. Переход после завершения анимации
+        setTimeout(() => {
+            window.location.href = 'https://ваш-сайт.ru';
+        }, 1500); // 300 + 1200
     }
 }
 const dialogHint = document.getElementById('dialogHint');
