@@ -14,15 +14,7 @@ const scaledCanvas = {
   height: canvas.height / 4,
 }
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-if (isMobile) {
-    canvas.style.transform = 'rotate(90deg)';
-    canvas.style.transformOrigin = 'center center';
-    canvas.style.position = 'absolute';
-    canvas.style.top = '50%';
-    canvas.style.left = '50%';
-    canvas.style.transform = 'translate(-50%, -50%) rotate(90deg)';
-    document.body.style.overflow = 'hidden';
-}
+
 const floorCollisions2D = []
 for (let i = 0; i < floorCollisions.length; i += 36) {
   floorCollisions2D.push(floorCollisions.slice(i, i + 36))
@@ -290,21 +282,19 @@ window.addEventListener('keyup', (event) => {
   }
 })
 // touch управление
+canvas.addEventListener('touchstart', handleTouchStart);
+canvas.addEventListener('touchend', handleTouchEnd);
+
 function handleTouchStart(e) {
     const rect = canvas.getBoundingClientRect();
     const touch = e.touches[0];
 
-    let x = touch.clientX - rect.left;
-    let y = touch.clientY - rect.top;
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
 
-    if (isMobile) {
-        // При повороте на 90° меняются оси:
-        [x, y] = [y, canvas.width - x];
-    }
-
-    if (y < canvas.height / 3) {
+    if (y < rect.height / 3) {
         player.velocity.y = -4; // прыжок
-    } else if (x < canvas.width / 2) {
+    } else if (x < rect.width / 2) {
         keys.a.pressed = true;  // влево
     } else {
         keys.d.pressed = true;  // вправо
@@ -315,3 +305,4 @@ function handleTouchEnd(e) {
     keys.a.pressed = false;
     keys.d.pressed = false;
 }
+
