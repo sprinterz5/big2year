@@ -33,6 +33,27 @@ window.addEventListener('resize', resizeCanvasMaintainingAspect);
 
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+// After your isMobile detection
+const pcControlsHint = document.getElementById('pcControlsHint');
+const mobileControlsHint = document.getElementById('mobileControlsHint');
+
+// Show appropriate controls
+if (isMobile) {
+  mobileControlsHint.style.display = 'block';
+  
+  // Optional: Hide after 5 seconds
+  setTimeout(() => {
+    mobileControlsHint.style.display = 'none';
+  }, 5000);
+} else {
+  pcControlsHint.style.display = 'block';
+  
+  // Optional: Hide after 5 seconds
+  setTimeout(() => {
+    pcControlsHint.style.display = 'none';
+  }, 5000);
+}
+
 const floorCollisions2D = []
 for (let i = 0; i < floorCollisions.length; i += 36) {
   floorCollisions2D.push(floorCollisions.slice(i, i + 36))
@@ -151,13 +172,7 @@ const background = new Sprite({
   },
   imageSrc: './img/background.png',
 })
-function clampCamera() {
-    // Верхний предел
-    if (camera.position.y > 0) {
-        camera.position.y = 0-b;
-    }
 
-}
 
 const backgroundImageHeight = 432
 // Обновляем камеру под новые размеры
@@ -267,7 +282,7 @@ player.centerCameraOnPlayer({
     if (player.lastDirection === 'right') player.switchSprite('Fall')
     else player.switchSprite('FallLeft')
   }
-  clampCamera();
+
   c.restore()
 }
 
@@ -288,21 +303,7 @@ window.addEventListener('keydown', (event) => {
             break;
     case 'Enter':
       if (event.key === 'Enter' && activeDialog) {
-        const dialogBox = document.getElementById('dialogBox');
-        const dialogText = document.getElementById('dialogText');
-        const dialogHint = document.getElementById('dialogHint');
-
-        dialogStep++;
-        if (dialogStep < activeDialog.length) {
-            dialogText.textContent = activeDialog[dialogStep];
-        } else {
-            dialogBox.style.display = 'none';
-            dialogHint.style.display = 'none';
-            activeDialog = null;
-
-            // Переход на другую страницу
-            window.location.href = 'https://example.com/nextpage.html';
-        }
+        advanceDialog();
       }
   }
 })
@@ -335,6 +336,9 @@ function handleTouchStart(e) {
     } else {
         keys.d.pressed = true;  // вправо
     }
+    if (activeDialog) {
+        advanceDialog();
+    } 
 }
 
 function handleTouchEnd(e) {
@@ -342,3 +346,26 @@ function handleTouchEnd(e) {
     keys.d.pressed = false;
 }
 
+const dialogBox = document.getElementById('dialogBox');
+
+function advanceDialog() {
+    const dialogText = document.getElementById('dialogText');
+    const dialogHint = document.getElementById('dialogHint');
+
+    dialogStep++;
+    if (dialogStep < activeDialog.length) {
+        dialogText.textContent = activeDialog[dialogStep];
+    } else {
+        dialogBox.style.display = 'none';
+        dialogHint.style.display = 'none';
+        activeDialog = null;
+
+        // window.location.href = 'https://example.com/nextpage.html';
+    }
+}
+const dialogHint = document.getElementById('dialogHint');
+if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+    dialogHint.textContent = 'Нажмите на любую область экрана, чтобы продолжить диалог';
+} else {
+    dialogHint.textContent = 'Нажмите Enter, чтобы продолжить диалог';
+}
