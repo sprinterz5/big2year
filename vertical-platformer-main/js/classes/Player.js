@@ -75,7 +75,20 @@ class Player extends Sprite {
       this.velocity.x = 0
     }
   }
+  centerCameraOnPlayer({ camera, canvas, worldWidth, worldHeight }) {
+    camera.position.x = -(this.position.x + this.width / 2 - canvas.width / 8);
+    camera.position.y = -(this.position.y + this.height / 2 - canvas.height / 8);
 
+    // Ограничения камеры, чтобы не уходила за края мира
+    camera.position.y = Math.min(
+    0,
+    Math.max(camera.position.y, -(worldHeight - scaledCanvas.height))
+);
+camera.position.x = Math.min(
+    0,
+    Math.max(camera.position.x, -(worldWidth - scaledCanvas.width))
+);
+}
   shouldPanCameraToTheLeft({ canvas, camera }) {
     const cameraboxRightSide = this.camerabox.position.x + this.camerabox.width
     const scaledDownCanvasWidth = canvas.width / 4
