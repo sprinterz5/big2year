@@ -6,14 +6,14 @@ let dialogStep = 0;
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-scaledCanvas = {
-  width: canvas.width / 4,
-  height: canvas.height / 4,
-}
+const scaledCanvas = {
+    width: 256, // фиксированное значение
+    height: 144,
+};
 
 const aspectRatio = 16 / 9;
 function resizeCanvasMaintainingAspect() {
-    
+    const aspectRatio = 16 / 9;
     let newWidth = window.innerWidth;
     let newHeight = newWidth / aspectRatio;
 
@@ -24,21 +24,9 @@ function resizeCanvasMaintainingAspect() {
 
     canvas.width = newWidth;
     canvas.height = newHeight;
-
-    scaledCanvas.width = newWidth / 4;
-    scaledCanvas.height = newHeight / 4;
-
-    
 }
 
-canvas.height = window.innerHeight;
-canvas.width = window.innerHeight * aspectRatio;
-const camera = {
-    position: {
-        x: 0,
-        y: 0,
-    },
-};
+
 resizeCanvasMaintainingAspect();
 window.addEventListener('resize', resizeCanvasMaintainingAspect);
 
@@ -163,9 +151,27 @@ const background = new Sprite({
   },
   imageSrc: './img/background.png',
 })
+function clampCamera() {
+    // Верхний предел
+    if (camera.position.y > 0) {
+        camera.position.y = 0;
+    }
+
+    // Нижний предел
+    const minCameraY = -(backgroundImageHeight - scaledCanvas.height);
+    if (camera.position.y < minCameraY) {
+        camera.position.y = minCameraY;
+    }
+}
 
 const backgroundImageHeight = 432
 // Обновляем камеру под новые размеры
+const camera = {
+    position: {
+        x: 0,
+        y: -backgroundImageHeight + scaledCanvas.height,
+    },
+};
     camera.position.y = -backgroundImageHeight + scaledCanvas.height;
 function openDialog(dialogArray) {
     const dialogBox = document.getElementById('dialogBox');
@@ -260,7 +266,7 @@ c.translate(camera.position.x, camera.position.y);
     if (player.lastDirection === 'right') player.switchSprite('Fall')
     else player.switchSprite('FallLeft')
   }
-
+  clampCamera();
   c.restore()
 }
 
