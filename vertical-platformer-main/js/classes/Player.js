@@ -76,18 +76,17 @@ class Player extends Sprite {
     }
   }
   centerCameraOnPlayer({ camera, canvas, worldWidth, worldHeight }) {
-    camera.position.x = -(this.position.x + this.width / 2 - canvas.width / 8);
-    camera.position.y = -(this.position.y + this.height / 2 - canvas.height / 8);
-
-    // Ограничения камеры, чтобы не уходила за края мира
-    camera.position.y = Math.min(
-    0,
-    Math.max(camera.position.y, -(worldHeight - scaledCanvas.height))
-);
-camera.position.x = Math.min(
-    0,
-    Math.max(camera.position.x, -(worldWidth - scaledCanvas.width))
-);
+    // Рассчитываем масштаб
+    const scaleX = canvas.width / scaledCanvas.width;
+    const scaleY = canvas.height / scaledCanvas.height;
+    
+    // Центрируем камеру на игроке с учетом масштаба
+    const targetX = -(this.position.x + this.width / 2 - canvas.width / (2 * scaleX));
+    const targetY = -(this.position.y + this.height / 2 - canvas.height / (2 * scaleY));
+    
+    // Ограничиваем камеру границами мира
+    camera.position.x = Math.min(0, Math.max(targetX, -(worldWidth - scaledCanvas.width)));
+    camera.position.y = Math.min(0, Math.max(targetY, -(worldHeight - scaledCanvas.height)));
 }
   shouldPanCameraToTheLeft({ canvas, camera }) {
     const cameraboxRightSide = this.camerabox.position.x + this.camerabox.width
