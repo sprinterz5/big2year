@@ -6,8 +6,19 @@ let dialogStep = 0;
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-canvas.width = 1024
-canvas.height = 576
+function resizeCanvas() {
+    const aspectRatio = 1024 / 576;
+    const screenWidth = window.innerWidth;
+    const width = screenWidth;
+    const height = width / aspectRatio;
+
+    canvas.width = width;
+    canvas.height = height;
+}
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
 
 const scaledCanvas = {
   width: canvas.width / 4,
@@ -169,11 +180,13 @@ function animate() {
   
 
   window.requestAnimationFrame(animate)
-  c.fillStyle = 'white'
-  c.fillRect(0, 0, canvas.width, canvas.height)
+  c.save();
+c.clearRect(0, 0, canvas.width, canvas.height);
 
-  c.save()
-  c.scale(4, 4)
+const scale = canvas.width / 1024;
+c.scale(scale, scale);
+
+
   c.translate(camera.position.x, camera.position.y)
   background.update()
   // collisionBlocks.forEach((collisionBlock) => {
