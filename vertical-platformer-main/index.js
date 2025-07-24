@@ -154,14 +154,9 @@ const background = new Sprite({
 function clampCamera() {
     // Верхний предел
     if (camera.position.y > 0) {
-        camera.position.y = 0;
+        camera.position.y = 0-b;
     }
 
-    // Нижний предел
-    const minCameraY = -(backgroundImageHeight - scaledCanvas.height);
-    if (camera.position.y < minCameraY) {
-        camera.position.y = minCameraY;
-    }
 }
 
 const backgroundImageHeight = 432
@@ -208,6 +203,12 @@ const scaleY = canvas.height / scaledCanvas.height;
 c.scale(scaleX, scaleY);
 c.translate(camera.position.x, camera.position.y);
 
+player.centerCameraOnPlayer({
+    camera,
+    canvas,
+    worldWidth: 576, // ширина мира (подставь свою)
+    worldHeight: 432 // высота мира (подставь свою)
+});
 
 
   background.update()
@@ -246,23 +247,23 @@ c.translate(camera.position.x, camera.position.y);
     player.switchSprite('Run')
     player.velocity.x = 2
     player.lastDirection = 'right'
-    player.shouldPanCameraToTheLeft({ canvas, camera })
+   // player.shouldPanCameraToTheLeft({ canvas, camera })
   } else if (keys.a.pressed) {
     player.switchSprite('RunLeft')
     player.velocity.x = -2
     player.lastDirection = 'left'
-    player.shouldPanCameraToTheRight({ canvas, camera })
+   // player.shouldPanCameraToTheRight({ canvas, camera })
   } else if (player.velocity.y === 0) {
     if (player.lastDirection === 'right') player.switchSprite('Idle')
     else player.switchSprite('IdleLeft')
   }
 
   if (player.velocity.y < 0) {
-    player.shouldPanCameraDown({ camera, canvas })
+    //player.shouldPanCameraDown({ camera, canvas })
     if (player.lastDirection === 'right') player.switchSprite('Jump')
     else player.switchSprite('JumpLeft')
   } else if (player.velocity.y > 0) {
-    player.shouldPanCameraUp({ camera, canvas })
+    //player.shouldPanCameraUp({ camera, canvas })
     if (player.lastDirection === 'right') player.switchSprite('Fall')
     else player.switchSprite('FallLeft')
   }
