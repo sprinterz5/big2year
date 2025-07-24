@@ -1,0 +1,39 @@
+<style>
+  body {
+    background: black;
+  }
+</style>
+<div id="gameContainer" style="position: relative; display: inline-block;">
+<canvas></canvas>
+<div id="dialogBox"
+     style="
+        position: absolute;
+    bottom: 30px; /* от нижней границы canvas */
+    left: 50%;    /* по центру canvas */
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-family: sans-serif;
+    display: none;
+    max-width: 80%;
+    text-align: center;
+     ">
+     <p id="dialogText"></p>
+    <p id="dialogHint" style="font-size: 12px; opacity: 0.7; margin-top: 5px;">Нажмите Enter для продолжения</p>
+
+</div>
+</div>
+
+
+<script src="./js/utils.js"></script>
+
+<script src="./js/classes/CollisionBlock.js"></script>
+<script src="./js/classes/Sprite.js"></script>
+<script src="./js/classes/DialogTrigger.js"></script>
+
+<script src="./js/classes/Player.js"></script>
+<script src="./js/data/collisions.js"></script>
+
+<script src="index.js"></script>
