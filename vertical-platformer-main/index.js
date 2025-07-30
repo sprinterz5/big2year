@@ -379,7 +379,7 @@ function advanceDialog() {
         
         // 3. Переход после завершения анимации
         setTimeout(() => {
-            window.location.href = 'https://ваш-сайт.ru';
+            window.location.href = 'http://sprinterz5.github.io/big2year/timer/';
         }, 1500); // 300 + 1200
     }
 }
