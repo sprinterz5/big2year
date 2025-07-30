@@ -50,7 +50,7 @@ Confettiful.prototype._renderConfetti = function() {
 window.confettiful = new Confettiful(document.querySelector('.js-container'));
 
 // Устанавливаем дату начала отношений — 31 июля 2023 года
-const startDate = new Date("July 31, 2023 00:00:00").getTime();
+const startDate = new Date("July 31, 2023 01:00:00").getTime();
 
 // Функция для расчета прошедших дней с учетом високосных годов
 const calculateLeapYears = (startDate, endDate) => {
